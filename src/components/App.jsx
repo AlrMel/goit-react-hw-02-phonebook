@@ -5,25 +5,34 @@ export class App extends Component {
   state = {
     contacts: [],
     name: '',
+    number: '',
   };
+
   loginInputId = nanoid();
 
-  handeleContact = event => {
-    this.setState({ [event.currentTarget.name]: event.currentTarget.value });
+  handleContact = event => {
+    const {name, value} = event.currentTarget;
+    this.setState({ [name]: value });
+    // this.setState({ [event.currentTarget.name]: event.currentTarget.value });
+    
   };
 
+handleSubmit = e => {
+e.preventDefault();
+console.log(this.state);
+};
 
 
   render() {
-    const {contacts, name} = this.state;
+    const { contacts, name } = this.state;
     return (
       <div>
         <h2>Phonebook</h2>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <label>
             Name:
             <input
-              onChange={this.handeleContact}
+              onChange={this.handleContact}
               id={this.loginInputId}
               value={this.state.name}
               type="text"
@@ -31,8 +40,16 @@ export class App extends Component {
               required
             />
           </label>
-          <label>Number
-            <input type="tel" />
+          <label>
+            Number:
+            <input
+              onChange={this.handleContact}
+              id={this.loginInputId}
+              value={this.state.number}
+              type="tel"
+              name="number"
+              required
+            />
           </label>
           <button type="submit">Add contact</button>
         </form>
