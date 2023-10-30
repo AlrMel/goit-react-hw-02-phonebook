@@ -11,17 +11,22 @@ export class App extends Component {
   loginInputId = nanoid();
 
   handleContact = event => {
-    const {name, value} = event.currentTarget;
+    const { name, value } = event.currentTarget;
     this.setState({ [name]: value });
     // this.setState({ [event.currentTarget.name]: event.currentTarget.value });
-    
   };
 
-handleSubmit = e => {
-e.preventDefault();
-console.log(this.state);
-};
+  handleSubmit = e => {
+    e.preventDefault();
 
+    const { name, number } = this.state;
+    const newContact = { name, number };
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newContact],
+      name: '',
+      number: '',
+    }));
+  };
 
   render() {
     const { contacts, name } = this.state;
@@ -56,9 +61,8 @@ console.log(this.state);
         <h2>Contacts</h2>
         <ul>
           {contacts.map(contact => (
-            <li key={name}>{contact.name}</li>
+            <li key={name}>{contact.name}: {contact.number}</li>
           ))}
-          <li></li>
         </ul>
       </div>
     );
