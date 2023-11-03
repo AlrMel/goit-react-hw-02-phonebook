@@ -3,12 +3,18 @@ import { nanoid } from 'nanoid';
 
 export class App extends Component {
   state = {
-    contacts: [],
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
     name: '',
     number: '',
+    filter: '',
   };
 
-  loginInputId = nanoid();
+  nlogiInputId = nanoid();
 
   handleContact = event => {
     const { name, value } = event.currentTarget;
@@ -20,7 +26,7 @@ export class App extends Component {
     e.preventDefault();
 
     const { name, number } = this.state;
-    const newContact = { name, number };
+    const newContact = { id: nanoid(), name, number };
     this.setState(prevState => ({
       contacts: [...prevState.contacts, newContact],
       name: '',
@@ -28,8 +34,20 @@ export class App extends Component {
     }));
   };
 
+  handelFindName = e => {
+    const { contacts } = this.state;
+
+    const filterContacts = contacts.filter(contact =>
+      contact.name
+        .toLocaleLowerCase()
+        .includes(e.target.value.toLocaleLowerCase())
+    );
+    this.setState({ filter: e.target.value, filterContacts });
+  };
+
   render() {
-    const { contacts, name } = this.state;
+    const { name, number, filter, filterContacts } = this.state;
+
     return (
       <div>
         <h2>Phonebook</h2>
@@ -39,7 +57,7 @@ export class App extends Component {
             <input
               onChange={this.handleContact}
               id={this.loginInputId}
-              value={this.state.name}
+              value={name}
               type="text"
               name="name"
               required
@@ -50,7 +68,7 @@ export class App extends Component {
             <input
               onChange={this.handleContact}
               id={this.loginInputId}
-              value={this.state.number}
+              value={number}
               type="tel"
               name="number"
               required
@@ -60,10 +78,26 @@ export class App extends Component {
         </form>
         <h2>Contacts</h2>
         <ul>
-          {contacts.map(contact => (
-            <li key={name}>{contact.name}: {contact.number}</li>
-          ))}
+          {filterContacts &&
+            filterContacts.map(contact => (
+              <li key={contact.id}>
+                {contact.name}: {contact.number}
+              </li>
+            ))}
         </ul>
+        <form action="">
+          <label>
+            Find contacts by Name
+            <input
+              onChange={this.handelFindName}
+              id={this.loginInputId}
+              value={filter}
+              type="text"
+              name="filter"
+              placeholder="Find a Name"
+            />
+          </label>
+        </form>
       </div>
     );
   }
